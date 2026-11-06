@@ -72,11 +72,11 @@ Gói `lean-trellis-workflow` đóng gói sẵn **toàn bộ 4 kỹ năng cốt l
 Sau khi cài đặt toàn cục, lệnh `lean-trellis` có thể dùng ở bất kỳ dự án nào:
 
 ```bash
-# Cài đặt từ thư mục mã nguồn:
-npm install -g /path/to/lean-trellis-workflow
+# Cài đặt trực tiếp từ GitHub repository:
+npm install -g baobinhday/lean-trellis-workflow
 
-# Hoặc khi đã publish lên npm registry:
-npm install -g lean-trellis-workflow
+# (Hoặc cài đặt từ thư mục mã nguồn cục bộ):
+# npm install -g /path/to/lean-trellis-workflow
 
 # Khởi tạo dự án hiện tại:
 lean-trellis init
@@ -88,9 +88,9 @@ lean-trellis init /home/user/my-project -u alice
 lean-trellis doctor
 ```
 
-> 💡 **Mẹo (Không cần cài đặt trước):** Bạn cũng có thể dùng `npx` để khởi tạo tức thì:
+> 💡 **Mẹo (Không cần cài đặt trước):** Bạn cũng có thể dùng `npx` để khởi tạo tức thì từ GitHub:
 > ```bash
-> npx lean-trellis-workflow init
+> npx -y github:baobinhday/lean-trellis-workflow init
 > ```
 
 ---

@@ -36,5 +36,13 @@
     "antigravity"
   ],
   "author": "Antigravity & User",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baobinhday/lean-trellis-workflow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baobinhday/lean-trellis-workflow/issues"
+  },
+  "homepage": "https://github.com/baobinhday/lean-trellis-workflow#readme"
 }
