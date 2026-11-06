@@ -20,6 +20,12 @@ echo ""
 TRELLIS_TEMPLATES="$SCRIPT_DIR/templates/trellis"
 SKILLS_SRC="$SCRIPT_DIR/skills"
 
+# Dọn dẹp các tệp/thư mục tàn dư của mini-trellis cũ nếu có
+rm -rf "$TARGET_DIR/.claude/commands/mini-trellis" \
+       "$TARGET_DIR/.opencode/commands/mini-trellis" \
+       "$TARGET_DIR/.opencode/plugins/mini-trellis" \
+       "$TARGET_DIR/.trellis/.mini-trellis-manifest.json" 2>/dev/null || true
+
 # ==============================================================================
 # BƯỚC 1: KHỞI TẠO TẦNG BỘ NHỚ (.trellis/)
 # ==============================================================================
@@ -193,9 +199,9 @@ if [ ! -f "$AGENTS_FILE" ]; then
 This project is managed by Lean Trellis Workflow & Memory Layer.
 
 <!-- TRELLIS:START -->
-# mini-trellis
+# Lean Trellis Memory Layer
 
-This project uses mini-trellis as a memory layer. Working knowledge lives under `.trellis/`:
+This project uses Lean Trellis as a memory layer. Working knowledge lives under `.trellis/`:
 
 - `.trellis/spec/` — durable contracts (short markdown; read `index.md` first)
 - `.trellis/research/` — topic inbox (`<topic>.md`; `README.md` is not a topic)
@@ -222,6 +228,26 @@ EOF
   echo "  ✓ Đã tạo mới file hướng dẫn: $AGENTS_FILE"
 else
   # Cập nhật block nếu AGENTS.md đã có sẵn
+  if grep -q "TRELLIS:START" "$AGENTS_FILE"; then
+    sed -i '/<!-- TRELLIS:START -->/,/<!-- TRELLIS:END -->/d' "$AGENTS_FILE"
+  fi
+  cat >> "$AGENTS_FILE" << 'EOF'
+
+<!-- TRELLIS:START -->
+# Lean Trellis Memory Layer
+
+This project uses Lean Trellis as a memory layer. Working knowledge lives under `.trellis/`:
+
+- `.trellis/spec/` — durable contracts (short markdown; read `index.md` first)
+- `.trellis/research/` — topic inbox (`<topic>.md`; `README.md` is not a topic)
+- `.trellis/workspace/` — per-developer journals
+
+Record a session with the `lean-trellis-remember` skill, `/lean-trellis-remember`, or `$lean-trellis-remember`. When earlier decisions or relevant project rules are needed, use `lean-trellis mem recall "<topic or path>"`; expand evidence with `lean-trellis mem read "<ref>"`. Promote lasting boundaries into spec with `lean-trellis-update-spec`.
+
+For a confirmed update, follow this short order: read the existing topic; edit that file; read it back and check the new rule; run `python3 ./.trellis/scripts/add_session.py --title "..." --summary "..." --topic <actual-topic-path>`.
+<!-- TRELLIS:END -->
+EOF
+
   if grep -q "LEAN_TRELLIS_WORKFLOW:START" "$AGENTS_FILE"; then
     sed -i '/<!-- LEAN_TRELLIS_WORKFLOW:START -->/,/<!-- LEAN_TRELLIS_WORKFLOW:END -->/d' "$AGENTS_FILE"
   fi
@@ -237,6 +263,9 @@ else
    - Read `implement.md`, execute step-by-step directly in the current session.
    - Test each step and check off `[x]` upon completion.
 3. When user chats: "Check task <name>", "Verify task <name>", "Nghiệm thu task <tên>":
+   - Verify Acceptance Criteria in `prd.md`, run test suite, update specs, and log session with `add_session.py`.
+<!-- LEAN_TRELLIS_WORKFLOW:END -->
+EOF
    - Verify Acceptance Criteria in `prd.md`, run test suite, update specs, and log session with `add_session.py`.
 <!-- LEAN_TRELLIS_WORKFLOW:END -->
 EOF

@@ -1621,7 +1621,7 @@ def _write_recording_status(exit_code: int) -> None:
             return
     except OSError:
         pass
-    print("mini-trellis: recording diagnostic write failed (state-write)", file=sys.stderr)
+    print("lean-trellis: recording diagnostic write failed (state-write)", file=sys.stderr)
 
 
 def run_with_status() -> int:
