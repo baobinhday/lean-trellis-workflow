@@ -43,3 +43,25 @@ Enable the `trellis-card` Desktop App (Tauri v2 + React 19) to natively observe 
 - **Markdown Inference:** Parses titles from `# PRD: <Title>` / frontmatter and derives progress and Kanban lanes (Planning, In Progress, Review, Done) from `- [x]` checklists in `implement.md`.
 - **FS Watcher:** `watch.rs` watches `.trellis/research/**` so checkbox edits emit instant UI re-renders.
 - **Document Resolver:** `lib.rs` loads PRD, Design, and Implementation tabs directly from `.trellis/research/<slug>/`.
+
+---
+
+<!-- ============================================================ -->
+<!-- SESSION 3: Memory Layer Initialization & Spec Contracts -->
+<!-- ============================================================ -->
+
+## Session 3: 2026-11-06 — Initialize Lean Trellis Memory Layer & Spec Contracts
+
+- **Commit:** `-` (docs: document Trellis Card desktop observer integration and finalize memory specs)
+- **Branch:** `main`
+- **Topic Reference:** [.trellis/research/lean-trellis-evolution.md](../../research/lean-trellis-evolution.md)
+- **Spec Reference:** [.trellis/spec/architecture.md](../../spec/architecture.md)
+
+### Context & Goals
+Bootstrap the Lean Trellis Memory Layer within the `lean-trellis-workflow` package repository itself to establish self-hosting memory and durable contracts.
+
+### Key Decisions & Changes
+- Initialized `.trellis/` structure via `lean-trellis init`.
+- Created durable specifications in `.trellis/spec/architecture.md` and `.trellis/spec/guides/lean-memory.md`.
+- Documented evolution and dual compatibility research topics under `.trellis/research/`.
+- Documented desktop Kanban observer capabilities in `README.md`.

@@ -226,6 +226,17 @@ Vì dự án cũ không có tài liệu, AI mới vào rất dễ phá vỡ "lu�
 
 ---
 
+### Kịch bản 3: Quan sát Kanban thời gian thực với ứng dụng Desktop Trellis Card
+
+Lean Trellis hoàn toàn tương thích và tích hợp sâu với ứng dụng Desktop [**`trellis-card`**](https://github.com/baobinhday/trellis-card) (Tauri v2 + React 19):
+
+- 🔍 **Tự động nhận diện:** Khi mở ứng dụng `trellis-card`, các task Lean Trellis lưu dưới `.trellis/research/<slug>/` sẽ tự động được nhận diện và hiển thị trực tiếp lên bảng Kanban 4 cột (Planning, In Progress, Review, Done).
+- 📊 **Tiến độ tự động từ Markdown:** Tỷ lệ hoàn thành và vị trí cột được suy luận tự động từ các checkbox `- [x]` trong `implement.md` mà không cần bất kỳ tệp cấu hình `task.json` nào.
+- ⚡ **Cập nhật thời gian thực (Live FS Watcher):** Khi AI hoặc bạn tick checkbox hoàn thành trong `implement.md`, bảng Kanban trên desktop tự động cập nhật ngay lập tức.
+- 📑 **Slide-over Drawer:** Bấm vào thẻ task để xem nhanh tab PRD, Design, và Checklist triển khai ngay trên desktop.
+
+---
+
 ## 5. Hướng dẫn Nâng cấp & Cập nhật (Upgrade Guide)
 
 ### 5.1. Cập nhật CLI toàn cục lên phiên bản mới nhất
