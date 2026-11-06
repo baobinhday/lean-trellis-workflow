@@ -2,7 +2,11 @@
 
 > **Bộ công cụ phát triển tính năng lớn & Tầng bộ nhớ trọn gói cho AI Coding Assistants.**  
 > **Cài đặt 1 bước duy nhất (All-in-One) · Trải nghiệm 100% qua Chat tự nhiên.**  
-> Tích hợp sẵn tầng bộ nhớ tinh gọn (Spec, Research, Journal) và quy trình phát triển tính năng lớn (PRD → Design → Implementation Checklist → Verification) trong một bộ công cụ duy nhất. Không cần cài đặt tách rời, không dùng sub-agent, không tốn token vô ích.
+> 
+> **Kiến trúc kiềng ba chân (The Triad Architecture):**  
+> 1. 🏗️ **Quy trình Trellis:** Vòng đời tính năng lớn bài bản (PRD ➔ Technical Design ➔ Implementation Checklist ➔ Verification).  
+> 2. ⚡ **Kiến trúc mini-trellis:** Tầng bộ nhớ tinh gọn (Spec, Research, Journal, `mem recall`), loại bỏ hoàn toàn sub-agent gây tốn token.  
+> 3. 🧠 **Kỷ luật DeepSeek (`write-notes-like-deepseek`):** Tư duy tri thức phủ định (Negative Knowledge / Rejected paths), phân tách rạch ròi Fact vs. Hypothesis, nguyên tắc Evidence-First và chống thối rữa ngữ cảnh (Anti-Context Rot).
 
 ---
 
