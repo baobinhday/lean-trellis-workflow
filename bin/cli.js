@@ -39,6 +39,7 @@ USAGE:
 
 COMMANDS:
   init, install            Initialize Lean Trellis Workflow & memory layer in target project (Default)
+  upgrade, refresh         Upgrade skills, hooks, and scripts in an existing project
   doctor                   Check prerequisites, memory layer, and skills configuration
   mem recall "<query>"     Search past project decisions and dialogue history
   mem read "<ref>"         Read detailed excerpt referenced from recall
@@ -52,9 +53,12 @@ OPTIONS:
   -v, --version       Show version
 
 EXAMPLES:
-  # Initialize in current directory:
+  # Initialize or upgrade in current directory:
   $ lean-trellis init
-  $ lean-trellis .
+  $ lean-trellis upgrade
+
+  # Initialize in a specific project:
+  $ lean-trellis init /path/to/my-project -u my-name
 
   # Recall past project decisions & history:
   $ lean-trellis mem recall "authentication"
@@ -80,7 +84,7 @@ while (i < args.length) {
     process.exit(0);
   } else if (arg === '-u' || arg === '--user') {
     user = args[++i];
-  } else if (arg === 'init' || arg === 'install') {
+  } else if (arg === 'init' || arg === 'install' || arg === 'upgrade' || arg === 'refresh') {
     command = 'init';
   } else if (arg === 'doctor') {
     command = 'doctor';

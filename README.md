@@ -226,7 +226,46 @@ Vì dự án cũ không có tài liệu, AI mới vào rất dễ phá vỡ "lu�
 
 ---
 
-## 5. So sánh tổng kết: Trellis cũ vs Lean Trellis Workflow
+## 5. Hướng dẫn Nâng cấp & Cập nhật (Upgrade Guide)
+
+### 5.1. Cập nhật CLI toàn cục lên phiên bản mới nhất
+Khi repository GitHub có cập nhật tính năng mới:
+```bash
+npm install -g baobinhday/lean-trellis-workflow
+```
+
+### 5.2. Cập nhật dự án đang sử dụng Lean Trellis
+Khi đã cập nhật CLI, bạn có thể làm mới bộ kỹ năng và hooks trong dự án hiện tại:
+```bash
+cd /path/to/my-project
+lean-trellis upgrade
+# (hoặc: lean-trellis init)
+```
+
+> 🛡️ **Tính an toàn tuyệt đối (Non-Destructive Upgrade):**  
+> Lệnh `upgrade` / `init` được thiết kế an toàn:
+> - ✅ **Bảo toàn 100% dữ liệu dự án:** Tuyệt đối không ghi đè nhật ký developer (`.trellis/workspace/`), không đụng vào các topic đã có trong `.trellis/research/`, không xóa các file spec trong `.trellis/spec/`.
+> - 🔄 **Cập nhật hệ thống:** Tự động đồng bộ 4 bộ skills mới nhất (`.agent/skills/`, `.claude/skills/`, `.cursor/skills/`, `.opencode/skills/`), SessionStart hooks và các template tài liệu.
+> - 🩺 **Kiểm tra sau nâng cấp:** Chạy `lean-trellis doctor` để xác nhận mọi thành phần hoạt động trơn tru.
+
+### 5.3. Di chuyển từ Trellis cũ (Trellis 1.0) sang Lean Trellis
+Nếu bạn có một dự án đang dùng Trellis cũ (có sub-agents, tasks phân mảnh, forum channel):
+```bash
+cd /path/to/legacy-trellis-project
+
+# Bước 1: Dọn sạch sub-agents cũ và gộp tasks về research
+mini-trellis migrate -y
+
+# Bước 2: Cài đặt Lean Trellis Workflow & Bộ nhớ
+lean-trellis init
+
+# Bước 3: Kiểm tra môi trường hoàn tất
+lean-trellis doctor
+```
+
+---
+
+## 6. So sánh tổng kết: Trellis cũ vs Lean Trellis Workflow
 
 | Tiêu chí | Trellis cũ | Lean Trellis Workflow (All-in-One) |
 | :--- | :--- | :--- |
