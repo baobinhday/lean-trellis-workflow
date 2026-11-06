@@ -1,0 +1,40 @@
+{
+  "name": "lean-trellis-workflow",
+  "version": "1.0.0",
+  "description": "Structured, single-agent workflow for large features and complex tasks in AI coding assistants",
+  "main": "index.js",
+  "bin": {
+    "lean-trellis": "./bin/cli.js",
+    "lean-trellis-workflow": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "skills",
+    "templates",
+    "scripts",
+    "install.sh",
+    "README.md"
+  ],
+  "scripts": {
+    "init": "node ./bin/cli.js init",
+    "doctor": "node ./bin/cli.js doctor",
+    "install-to": "bash install.sh"
+  },
+  "dependencies": {
+    "mini-trellis": "^0.3.5"
+  },
+  "keywords": [
+    "trellis",
+    "mini-trellis",
+    "workflow",
+    "agent-skills",
+    "ai",
+    "claude",
+    "cursor",
+    "codex",
+    "antigravity"
+  ],
+  "author": "Antigravity & User",
+  "license": "MIT"
+}
