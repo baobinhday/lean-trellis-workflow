@@ -1,10 +1,33 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
 const pkg = require('../package.json');
 const { install, doctor } = require('../lib/installer');
 
 const args = process.argv.slice(2);
+
+function resolveMiniTrellisBin() {
+  const localBin = path.join(__dirname, '..', 'node_modules', '.bin', 'mini-trellis');
+  if (fs.existsSync(localBin)) return localBin;
+  return 'mini-trellis';
+}
+
+// Memory recall / read delegation
+if (args[0] === 'mem') {
+  const bin = resolveMiniTrellisBin();
+  const result = spawnSync(bin, ['mem', ...args.slice(1)], { stdio: 'inherit' });
+  process.exit(result.status !== null ? result.status : 0);
+} else if (args[0] === 'recall') {
+  const bin = resolveMiniTrellisBin();
+  const result = spawnSync(bin, ['mem', 'recall', ...args.slice(1)], { stdio: 'inherit' });
+  process.exit(result.status !== null ? result.status : 0);
+} else if (args[0] === 'read') {
+  const bin = resolveMiniTrellisBin();
+  const result = spawnSync(bin, ['mem', 'read', ...args.slice(1)], { stdio: 'inherit' });
+  process.exit(result.status !== null ? result.status : 0);
+}
 
 function showHelp() {
   console.log(`
@@ -15,10 +38,13 @@ USAGE:
   $ lean-trellis [command] [options] [target-directory]
 
 COMMANDS:
-  init, install    Initialize Lean Trellis Workflow & memory layer in the target project (Default)
-  doctor           Check prerequisites, memory layer, and skills configuration
-  help             Show this help message
-  version          Show version
+  init, install            Initialize Lean Trellis Workflow & memory layer in target project (Default)
+  doctor                   Check prerequisites, memory layer, and skills configuration
+  mem recall "<query>"     Search past project decisions and dialogue history
+  mem read "<ref>"         Read detailed excerpt referenced from recall
+  recall "<query>"         Short alias for mem recall
+  help                     Show this help message
+  version                  Show version
 
 OPTIONS:
   -u, --user <name>   Developer username for .trellis/workspace/<name>
@@ -30,11 +56,9 @@ EXAMPLES:
   $ lean-trellis init
   $ lean-trellis .
 
-  # Initialize in a specific project:
-  $ lean-trellis init /path/to/my-project -u my-name
-
-  # Run via npx without global install:
-  $ npx ${pkg.name} init
+  # Recall past project decisions & history:
+  $ lean-trellis mem recall "authentication"
+  $ lean-trellis recall "database schema"
 
   # Check configuration:
   $ lean-trellis doctor

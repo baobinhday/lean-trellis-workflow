@@ -64,7 +64,7 @@ Gói `lean-trellis-workflow` đóng gói sẵn **toàn bộ 4 kỹ năng cốt l
 | **`lean-trellis-workflow`** | `.agent/skills/`<br>`.agents/skills/`<br>`.claude/skills/`<br>`.cursor/skills/` | **Nhạc trưởng quy trình**: Tự động tạo thư mục, lập `prd.md`, thiết kế `design.md`, lập checklist `implement.md` và nghiệm thu trực tiếp. | Khi chat: "Tạo task...", "Implement task...", "Check task..." hoặc `/plan`. |
 | **`lean-trellis-remember`** | Đã đóng gói sẵn | **Thư ký ghi chép**: Lưu các quyết định đã chốt, hướng tiếp cận bị từ chối vào nhật ký developer (`.trellis/workspace/`). | Khi xong một feature hoặc kết thúc phiên làm việc có quyết định quan trọng. |
 | **`lean-trellis-update-spec`** | Đã đóng gói sẵn | **Người gác cổng quy ước**: Cập nhật các ranh giới kiến trúc và hợp đồng bền vững vào `.trellis/spec/`. | Khi kiến trúc hệ thống, API contract hoặc quy tắc code thay đổi lâu dài. |
-| **`lean-trellis-session-insight`** | Đã đóng gói sẵn | **Thám tử tìm kiếm**: Dùng CLI `mini-trellis mem recall` để bới tìm cách giải quyết trong tài liệu và lịch sử chat cũ. | Trước khi code, khi cần kiểm tra xem "vấn đề này trước đây giải quyết ra sao". |
+| **`lean-trellis-session-insight`** | Đã đóng gói sẵn | **Thám tử tìm kiếm**: Dùng CLI `lean-trellis mem recall` (hoặc `lean-trellis recall`) để bới tìm cách giải quyết trong tài liệu và lịch sử chat cũ. | Trước khi code, khi cần kiểm tra xem "vấn đề này trước đây giải quyết ra sao". |
 
 ---
 
@@ -236,7 +236,7 @@ Vì dự án cũ không có tài liệu, AI mới vào rất dễ phá vỡ "lu�
 | **Áp dụng** | Bắt buộc cho mọi việc, ngay cả sửa 1 dòng code | **Theo nhu cầu**: Chỉ kích hoạt khi gặp tính năng lớn |
 | **Độ ngốn Token** | Rất nặng (~37k+ ký tự context cho 10 lượt) | Cực nhẹ (~4.9k ký tự context, 0 per-turn injection) |
 | **Tệp quy hoạch** | Rải rác trong `.trellis/tasks/<name>/` kèm `task.json` | Nằm gọn trong `.trellis/research/<slug>/` (`prd.md`, `design.md`, `implement.md`) |
-| **Khả năng tra cứu** | Khó tìm kiếm xuyên các phiên chat cũ | Tích hợp sẵn `mini-trellis mem recall` |
+| **Khả năng tra cứu** | Khó tìm kiếm xuyên các phiên chat cũ | Tích hợp sẵn `lean-trellis mem recall` |
 
 ---
 

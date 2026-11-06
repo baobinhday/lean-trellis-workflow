@@ -201,7 +201,7 @@ This project uses mini-trellis as a memory layer. Working knowledge lives under 
 - `.trellis/research/` — topic inbox (`<topic>.md`; `README.md` is not a topic)
 - `.trellis/workspace/` — per-developer journals
 
-Record a session with the `lean-trellis-remember` skill, `/lean-trellis-remember`, or `$lean-trellis-remember`. When earlier decisions or relevant project rules are needed, use `mini-trellis mem recall "<topic or path>"`; expand evidence with `mini-trellis mem read "<ref>"`. Promote lasting boundaries into spec with `lean-trellis-update-spec`.
+Record a session with the `lean-trellis-remember` skill, `/lean-trellis-remember`, or `$lean-trellis-remember`. When earlier decisions or relevant project rules are needed, use `lean-trellis mem recall "<topic or path>"`; expand evidence with `lean-trellis mem read "<ref>"`. Promote lasting boundaries into spec with `lean-trellis-update-spec`.
 
 For a confirmed update, follow this short order: read the existing topic; edit that file; read it back and check the new rule; run `python3 ./.trellis/scripts/add_session.py --title "..." --summary "..." --topic <actual-topic-path>`.
 <!-- TRELLIS:END -->

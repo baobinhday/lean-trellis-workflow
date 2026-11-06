@@ -55,7 +55,7 @@ The user interacts using natural language. The assistant automatically activates
 2. Scaffold `.trellis/research/<slug>/` with `prd.md`, `design.md`, and `implement.md` from templates (or run `scripts/new-feature.sh <slug> "<name>"`).
 3. Recall prior relevant project decisions:
    ```bash
-   mini-trellis mem recall "<feature keywords>"
+   lean-trellis mem recall "<feature keywords>"
    ```
 4. Read relevant specs under `.trellis/spec/` or `docs/`.
 5. Pre-fill known facts and repository constraints into `prd.md`.
