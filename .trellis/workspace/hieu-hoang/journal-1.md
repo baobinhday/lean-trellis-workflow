@@ -65,3 +65,26 @@ Bootstrap the Lean Trellis Memory Layer within the `lean-trellis-workflow` packa
 - Created durable specifications in `.trellis/spec/architecture.md` and `.trellis/spec/guides/lean-memory.md`.
 - Documented evolution and dual compatibility research topics under `.trellis/research/`.
 - Documented desktop Kanban observer capabilities in `README.md`.
+
+
+## Session 4: Establish deterministic status lifecycle and clean template placeholders
+<!-- trellis-session: v=2 fp=7b937ce971da54ae -->
+
+**Date**: 2026-11-07
+**Task**: Establish deterministic status lifecycle and clean template placeholders
+**Branch**: `main`
+
+### Summary
+
+Standardized Lean Trellis status enum (Planning, In Progress, Verification, Blocked, Completed), eliminated pipe placeholder templates, scoped checklists strictly to Section 1, and added durable lifecycle spec.
+Topics: [.trellis/research/lean-trellis-evolution.md](../../research/lean-trellis-evolution.md)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `528f5dd` | feat(lifecycle): establish deterministic status lifecycle and clean template placeholders |
+
+### Status
+
+[OK] **Completed**
