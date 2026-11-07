@@ -9,26 +9,33 @@ const memory = require('../lib/memory');
 
 const args = process.argv.slice(2);
 
-function checkForUpdate(silent = false) {
+function isLocalDevLink() {
   try {
-    const latest = execSync(`npm view ${pkg.name} version`, {
-      encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'ignore'],
-      timeout: 3000
-    }).trim();
-    if (latest && latest !== pkg.version) {
-      console.log(`\n💡 A newer version of ${pkg.name} is available: v${latest} (installed: v${pkg.version})`);
-      console.log(`   To update global CLI: npm i -g ${pkg.name}\n`);
+    const globalPath = execSync('npm root -g', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+    const pkgPath = path.join(globalPath, pkg.name);
+    if (fs.existsSync(pkgPath) && fs.lstatSync(pkgPath).isSymbolicLink()) {
       return true;
-    } else if (!silent) {
-      console.log(`\n✅ ${pkg.name} is up to date (v${pkg.version})\n`);
     }
-  } catch (_) {
-    if (!silent) {
-      console.log(`\nℹ️  Unable to check remote registry (offline or network timeout). Current version: v${pkg.version}\n`);
-    }
-  }
+  } catch (_) {}
   return false;
+}
+
+function upgradeGlobalCLI() {
+  if (isLocalDevLink()) {
+    console.log(`ℹ️  Running in local development mode (linked via npm link).`);
+    console.log(`   Skipping remote npm install to preserve local workspace symlink.\n`);
+    return;
+  }
+
+  console.log(`\n📦 Upgrading global CLI (${pkg.name}) from GitHub...`);
+  const repo = 'baobinhday/lean-trellis-workflow';
+  try {
+    execSync(`npm install -g ${repo}`, { stdio: 'inherit' });
+    console.log(`✅ Global CLI upgraded successfully!\n`);
+  } catch (err) {
+    console.warn(`⚠️  Could not automatically update global npm package: ${err.message}`);
+    console.warn(`   You can update manually by running: npm install -g ${repo}\n`);
+  }
 }
 
 // Memory recall / read / list handling (Native Lean Trellis Memory Engine)
@@ -144,7 +151,7 @@ try {
   if (command === 'doctor') {
     doctor(targetDir);
   } else if (command === 'upgrade') {
-    checkForUpdate(true);
+    upgradeGlobalCLI();
     install({ targetDir, user });
   } else {
     install({ targetDir, user });
