@@ -35,5 +35,5 @@ Traditional Trellis 1.0 relied on a heavy structure centered around `.trellis/ta
   - At most 1 high-value question with recommendation & trade-off.
   - Always articulate the strongest argument for a rejected option before rejecting it.
 
-### Decision 3: Single CLI Binary with Subcommand Proxying
-- **Resolution:** `bin/cli.js` directly implements `init`, `upgrade`, `doctor`, and proxies `mem recall` / `recall` and `mem read` / `read` to the underlying engine (`mini-trellis`), ensuring users only ever need to memorize `lean-trellis`.
+### Decision 3: 100% Self-Contained CLI with Built-In Native Memory Engine
+- **Resolution:** `bin/cli.js` directly implements `init`, `upgrade`, `check-update`, `doctor`, and native `mem recall` / `recall` and `mem read` / `read` via `lib/memory.js`. Completely eliminated all auxiliary dependencies, making `lean-trellis` 100% standalone, self-sufficient, and zero-dependency.

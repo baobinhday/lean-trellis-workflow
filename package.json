@@ -21,12 +21,10 @@
     "doctor": "node ./bin/cli.js doctor",
     "install-to": "bash install.sh"
   },
-  "dependencies": {
-    "mini-trellis": "^0.3.5"
-  },
+  "dependencies": {},
   "keywords": [
     "trellis",
-    "mini-trellis",
+    "lean-trellis",
     "workflow",
     "agent-skills",
     "ai",

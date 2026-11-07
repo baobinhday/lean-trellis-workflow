@@ -5,7 +5,7 @@
 > 
 > **Kiến trúc kiềng ba chân (The Triad Architecture):**  
 > 1. 🏗️ **Quy trình Trellis:** Vòng đời tính năng lớn bài bản (PRD ➔ Technical Design ➔ Implementation Checklist ➔ Verification).  
-> 2. ⚡ **Kiến trúc mini-trellis:** Tầng bộ nhớ tinh gọn (Spec, Research, Journal, `mem recall`), loại bỏ hoàn toàn sub-agent gây tốn token.  
+> 2. ⚡ **Kiến trúc bộ nhớ tinh gọn (Lean Memory Layer):** Tầng bộ nhớ độc lập (Spec, Research, Journal, `mem recall`), loại bỏ hoàn toàn sub-agent gây tốn token, 100% self-contained.  
 > 3. 🧠 **Kỷ luật DeepSeek (`write-notes-like-deepseek`):** Tư duy tri thức phủ định (Negative Knowledge / Rejected paths), phân tách rạch ròi Fact vs. Hypothesis, nguyên tắc Evidence-First và chống thối rữa ngữ cảnh (Anti-Context Rot).
 
 ---
@@ -39,7 +39,7 @@ Sau khi cài đặt, **bạn KHÔNG CẦN phải mở terminal gõ lệnh bash h
 
 ## 2. Bản đồ & Vai trò của các Skill trọn gói
 
-Gói `lean-trellis-workflow` đóng gói sẵn **toàn bộ 4 kỹ năng cốt lõi**, bạn không cần cài thêm `mini-trellis` riêng lẻ:
+Gói `lean-trellis-workflow` hoạt động hoàn toàn độc lập và đóng gói sẵn **toàn bộ 4 kỹ năng cốt lõi**, không cần cài thêm bất kỳ công cụ phụ trợ nào:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -73,7 +73,7 @@ Gói `lean-trellis-workflow` đóng gói sẵn **toàn bộ 4 kỹ năng cốt l
 
 ## 3. Cài đặt 1 Bước duy nhất (All-in-One Installation)
 
-**Không cần chạy `mini-trellis init` riêng.** Bạn có thể chọn 1 trong các cách sau:
+**Gói độc lập 100%, không cần cài thêm bất kỳ công cụ ngoài nào.** Bạn có thể chọn 1 trong các cách sau:
 
 ### Cách 1: Cài đặt toàn cục qua NPM (Khuyến nghị)
 Sau khi cài đặt toàn cục, lệnh `lean-trellis` có thể dùng ở bất kỳ dự án nào:
@@ -267,13 +267,10 @@ Nếu bạn có một dự án đang dùng Trellis cũ (có sub-agents, tasks ph
 ```bash
 cd /path/to/legacy-trellis-project
 
-# Bước 1: Dọn sạch sub-agents cũ và gộp tasks về research
-mini-trellis migrate -y
-
-# Bước 2: Cài đặt Lean Trellis Workflow & Bộ nhớ
+# Bước 1: Cài đặt Lean Trellis Workflow & Bộ nhớ (tự động dọn dẹp cấu hình cũ)
 lean-trellis init
 
-# Bước 3: Kiểm tra môi trường hoàn tất
+# Bước 2: Kiểm tra môi trường hoàn tất
 lean-trellis doctor
 ```
 

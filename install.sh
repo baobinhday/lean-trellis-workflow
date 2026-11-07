@@ -20,7 +20,7 @@ echo ""
 TRELLIS_TEMPLATES="$SCRIPT_DIR/templates/trellis"
 SKILLS_SRC="$SCRIPT_DIR/skills"
 
-# Dọn dẹp các tệp/thư mục tàn dư của mini-trellis cũ nếu có
+# Dọn dẹp các tệp/thư mục tàn dư cũ nếu có
 rm -rf "$TARGET_DIR/.claude/commands/mini-trellis" \
        "$TARGET_DIR/.opencode/commands/mini-trellis" \
        "$TARGET_DIR/.opencode/plugins/mini-trellis" \
@@ -159,7 +159,7 @@ echo "🧠 3. Cài đặt các kỹ năng (Skills)..."
 install_all_skills_to() {
   local base_dir="$1"
   mkdir -p "$base_dir"
-  # Dọn dẹp skill cũ có tiền tố mini-trellis- nếu có
+  # Dọn dẹp skill tàn dư cũ nếu có
   rm -rf "$base_dir"/mini-trellis-* 2>/dev/null || true
   for skill_dir in "$SKILLS_SRC"/*; do
     if [ -d "$skill_dir" ]; then

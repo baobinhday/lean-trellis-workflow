@@ -2,31 +2,71 @@
 
 const fs = require('fs');
 const path = require('path');
-const { spawnSync } = require('child_process');
+const { execSync } = require('child_process');
 const pkg = require('../package.json');
 const { install, doctor } = require('../lib/installer');
+const memory = require('../lib/memory');
 
 const args = process.argv.slice(2);
 
-function resolveMiniTrellisBin() {
-  const localBin = path.join(__dirname, '..', 'node_modules', '.bin', 'mini-trellis');
-  if (fs.existsSync(localBin)) return localBin;
-  return 'mini-trellis';
+function checkForUpdate(silent = false) {
+  try {
+    const latest = execSync(`npm view ${pkg.name} version`, {
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+      timeout: 3000
+    }).trim();
+    if (latest && latest !== pkg.version) {
+      console.log(`\n💡 A newer version of ${pkg.name} is available: v${latest} (installed: v${pkg.version})`);
+      console.log(`   To update global CLI: npm i -g ${pkg.name}\n`);
+      return true;
+    } else if (!silent) {
+      console.log(`\n✅ ${pkg.name} is up to date (v${pkg.version})\n`);
+    }
+  } catch (_) {
+    if (!silent) {
+      console.log(`\nℹ️  Unable to check remote registry (offline or network timeout). Current version: v${pkg.version}\n`);
+    }
+  }
+  return false;
 }
 
-// Memory recall / read delegation
+// Memory recall / read / list handling (Native Lean Trellis Memory Engine)
 if (args[0] === 'mem') {
-  const bin = resolveMiniTrellisBin();
-  const result = spawnSync(bin, ['mem', ...args.slice(1)], { stdio: 'inherit' });
-  process.exit(result.status !== null ? result.status : 0);
+  const sub = args[1];
+  if (sub === 'recall') {
+    memory.recall(args[2], { cwd: process.cwd() });
+    process.exit(0);
+  } else if (sub === 'read') {
+    memory.read(args.slice(2), { cwd: process.cwd() });
+    process.exit(0);
+  } else if (sub === 'list' || sub === 'ls') {
+    memory.list({ cwd: process.cwd() });
+    process.exit(0);
+  } else if (sub === 'help' || !sub) {
+    console.log(`
+Lean Trellis Memory Engine (mem):
+
+USAGE:
+  $ lean-trellis mem recall "<query>"    Search past project decisions and documents
+  $ lean-trellis mem read "<ref>"...     Read full excerpt referenced from recall
+  $ lean-trellis mem list                List all specs, research topics, and journals
+`);
+    process.exit(0);
+  } else {
+    // Treat as query for recall
+    memory.recall(args.slice(1).join(' '), { cwd: process.cwd() });
+    process.exit(0);
+  }
 } else if (args[0] === 'recall') {
-  const bin = resolveMiniTrellisBin();
-  const result = spawnSync(bin, ['mem', 'recall', ...args.slice(1)], { stdio: 'inherit' });
-  process.exit(result.status !== null ? result.status : 0);
+  memory.recall(args.slice(1).join(' '), { cwd: process.cwd() });
+  process.exit(0);
 } else if (args[0] === 'read') {
-  const bin = resolveMiniTrellisBin();
-  const result = spawnSync(bin, ['mem', 'read', ...args.slice(1)], { stdio: 'inherit' });
-  process.exit(result.status !== null ? result.status : 0);
+  memory.read(args.slice(1), { cwd: process.cwd() });
+  process.exit(0);
+} else if (args[0] === 'check-update') {
+  checkForUpdate(false);
+  process.exit(0);
 }
 
 function showHelp() {
@@ -40,6 +80,7 @@ USAGE:
 COMMANDS:
   init, install            Initialize Lean Trellis Workflow & memory layer in target project (Default)
   upgrade, refresh         Upgrade skills, hooks, and scripts in an existing project
+  check-update             Check npm registry for newer CLI package versions
   doctor                   Check prerequisites, memory layer, and skills configuration
   mem recall "<query>"     Search past project decisions and dialogue history
   mem read "<ref>"         Read detailed excerpt referenced from recall
@@ -56,6 +97,9 @@ EXAMPLES:
   # Initialize or upgrade in current directory:
   $ lean-trellis init
   $ lean-trellis upgrade
+
+  # Check for package updates:
+  $ lean-trellis check-update
 
   # Initialize in a specific project:
   $ lean-trellis init /path/to/my-project -u my-name
@@ -84,8 +128,10 @@ while (i < args.length) {
     process.exit(0);
   } else if (arg === '-u' || arg === '--user') {
     user = args[++i];
-  } else if (arg === 'init' || arg === 'install' || arg === 'upgrade' || arg === 'refresh') {
+  } else if (arg === 'init' || arg === 'install') {
     command = 'init';
+  } else if (arg === 'upgrade' || arg === 'refresh') {
+    command = 'upgrade';
   } else if (arg === 'doctor') {
     command = 'doctor';
   } else if (!arg.startsWith('-')) {
@@ -97,6 +143,9 @@ while (i < args.length) {
 try {
   if (command === 'doctor') {
     doctor(targetDir);
+  } else if (command === 'upgrade') {
+    checkForUpdate(true);
+    install({ targetDir, user });
   } else {
     install({ targetDir, user });
   }
