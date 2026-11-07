@@ -19,16 +19,19 @@ Sau khi cài đặt, **bạn KHÔNG CẦN phải mở terminal gõ lệnh bash h
 │                                   BA LỆNH CHAT CHÍNH                                   │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 1. LẬP KẾ HOẠCH:   "Tạo task <tên>", "Lập kế hoạch <tên>", hoặc "/plan <tên>"          │
-│    ➔ AI TỰ ĐỘNG tạo thư mục .trellis/research/<slug>/, sinh prd.md, design.md, implement│
+│    ➔ AI TỰ ĐỘNG tạo .trellis/research/<slug>/, sinh prd.md, design.md, implement.md    │
 │    ➔ AI TỰ ĐỘNG khảo sát code trước, rồi hỏi phỏng vấn bạn 1 câu quan trọng nhất.      │
+│    ➔ Trạng thái: prd.md (Draft ➔ Approved), implement.md (Planning) [Cột 1: Planning]  │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 2. TRIỂN KHAI:     "Implement task <tên>", "Triển khai task <tên>"                     │
-│    ➔ AI TỰ ĐỘNG đọc implement.md, thông báo bước làm, viết code trực tiếp, test & tick  │
-│    ➔ Bạn can thiệp, phản hồi và góp ý trực tiếp ngay trong hội thoại hiện tại.         │
+│    ➔ AI cập nhật implement.md sang 'In Progress', code trực tiếp & tick [x] từng bước  │
+│    ➔ Khi xong hết checklist: chuyển 'Verification' & xuất 2 lệnh Git (add, commit)      │
+│    ➔ Trạng thái: implement.md (In Progress ➔ Verification) [Cột 2 / Cột 3]            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 3. NGHIỆM THU:     "Check task <tên>", "Nghiệm thu task <tên>", "Hoàn thành task"      │
 │    ➔ AI TỰ ĐỘNG đối chiếu Acceptance Criteria trong prd.md, chạy full test suite       │
-│    ➔ AI TỰ ĐỘNG cập nhật spec và ghi nhật ký hoàn tất qua add_session.py.             │
+│    ➔ Khi đạt: đồng bộ tất cả tài liệu sang 'Completed' & ghi nhật ký add_session.py    │
+│    ➔ Trạng thái: prd.md, design.md, implement.md (Completed) [Cột 4: Done]             │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
