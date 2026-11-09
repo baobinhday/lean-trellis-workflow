@@ -40,11 +40,15 @@ The user interacts using natural language. The assistant automatically activates
 - All phases (planning, coding, testing, verification) execute sequentially within the active chat session.
 - Keep the user in the loop with short, continuous progress updates.
 
-### 4. Topic Directory Management & Markdown Hygiene
+### 4. Topic Directory Management, Anti-Overwrite & Anti-Bloat
 - Maintain artifacts under `.trellis/research/<slug>/`:
   - `prd.md`: Requirements, in-scope/out-of-scope, testable acceptance criteria.
   - `design.md`: Architecture, data flow, contracts, and **Alternatives Considered** (always state the strongest reason for a rejected path before explaining why it was dismissed).
   - `implement.md`: Ordered checklist with `[ ]` checkboxes, target files, and test commands.
+- **Living Document & Anti-Overwrite Invariant**:
+  - If a topic directory already exists, **NEVER overwrite or blank out prior files**.
+  - Evolve the existing documents in-place: append the new Phase/Iteration, promote durable rules into `.trellis/spec/`, and keep files under **300 lines** (nén checklist cũ bằng `<details>` hoặc tóm tắt).
+  - If the new scope is a distinct subsystem, suggest a separate sub-topic (e.g., `<parent-slug>-<subsystem>`) with a link to the parent.
 - **Checklist Scope Rule**: Markdown checkboxes `- [ ]` and `- [x]` are **strictly reserved** for `## 1. Ordered Implementation Checklist`. Never use checkboxes in `## 3. Risk Watchlist`, notes, or references (use standard bullet points `- ` instead) to avoid corrupting subtask scanners.
 
 ---
