@@ -21,8 +21,11 @@ These guides help you **ask the right questions before coding**.
 
 | Guide | Purpose | When to Use |
 |-------|---------|-------------|
+| [Pre-Implementation Checklist](./pre-implementation-checklist.md) | Ask the right questions before writing code | Before adding constants, logic, types, or UI components |
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
+| [Semantic Change Checklist](./semantic-change-checklist.md) | Keep writers, readers, and docs in sync | When changing the meaning/unit/enum of an existing field |
+| [Bug Root Cause Thinking Guide](./bug-root-cause-thinking-guide.md) | Classify bugs and prevent recurrence | After hitting or fixing a non-trivial bug |
 | [Lean Trellis Lifecycle & Status Standard](./lean-trellis-lifecycle.md) | Canonical status enums & Kanban lane mapping | When designing, running, or verifying feature tasks |
 
 ---

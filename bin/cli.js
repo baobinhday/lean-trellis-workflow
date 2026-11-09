@@ -38,38 +38,87 @@ function upgradeGlobalCLI() {
   }
 }
 
-// Memory recall / read / list handling (Native Lean Trellis Memory Engine)
+function parseMemFlags(rawArgs) {
+  const opts = { cwd: process.cwd() };
+  const positional = [];
+  for (let idx = 0; idx < rawArgs.length; idx++) {
+    const a = rawArgs[idx];
+    if (a === '--platform' && rawArgs[idx + 1]) opts.platform = rawArgs[++idx];
+    else if (a === '--since' && rawArgs[idx + 1]) opts.since = rawArgs[++idx];
+    else if (a === '--until' && rawArgs[idx + 1]) opts.until = rawArgs[++idx];
+    else if (a === '--cwd' && rawArgs[idx + 1]) opts.cwd = rawArgs[++idx];
+    else if (a === '--limit' && rawArgs[idx + 1]) opts.limit = Number(rawArgs[++idx]);
+    else if (a === '--grep' && rawArgs[idx + 1]) opts.grep = rawArgs[++idx];
+    else if (a === '--turns' && rawArgs[idx + 1]) opts.turns = Number(rawArgs[++idx]);
+    else if (a === '--around' && rawArgs[idx + 1]) opts.around = Number(rawArgs[++idx]);
+    else if (a === '--max-chars' && rawArgs[idx + 1]) opts.maxChars = Number(rawArgs[++idx]);
+    else if (a === '--phase' && rawArgs[idx + 1]) opts.phase = rawArgs[++idx];
+    else if (a === '--global') opts.global = true;
+    else if (a === '--json') opts.json = true;
+    else positional.push(a);
+  }
+  return { opts, positional };
+}
+
+// Memory recall / read / search / context / extract / projects / list handling
 if (args[0] === 'mem') {
   const sub = args[1];
+  const { opts, positional } = parseMemFlags(args.slice(2));
   if (sub === 'recall') {
-    memory.recall(args[2], { cwd: process.cwd() });
+    memory.recall(positional.join(' '), opts);
     process.exit(0);
   } else if (sub === 'read') {
-    memory.read(args.slice(2), { cwd: process.cwd() });
+    memory.read(positional, opts);
+    process.exit(0);
+  } else if (sub === 'search') {
+    memory.search(positional.join(' '), opts);
+    process.exit(0);
+  } else if (sub === 'context') {
+    memory.context(positional[0], opts);
+    process.exit(0);
+  } else if (sub === 'extract') {
+    memory.extract(positional[0], opts);
+    process.exit(0);
+  } else if (sub === 'projects') {
+    memory.projects(opts);
     process.exit(0);
   } else if (sub === 'list' || sub === 'ls') {
-    memory.list({ cwd: process.cwd() });
+    memory.list(opts);
     process.exit(0);
-  } else if (sub === 'help' || !sub) {
+  } else if (sub === 'help' || sub === '--help' || sub === '-h' || !sub) {
     console.log(`
 Lean Trellis Memory Engine (mem):
 
 USAGE:
-  $ lean-trellis mem recall "<query>"    Search past project decisions and documents
-  $ lean-trellis mem read "<ref>"...     Read full excerpt referenced from recall
-  $ lean-trellis mem list                List all specs, research topics, and journals
+  $ lean-trellis mem recall "<query>"                     Search project Markdown & past AI sessions together
+  $ lean-trellis mem read "<ref>"...                      Expand one or more doc/session refs from recall
+  $ lean-trellis mem search "<keyword>" [flags]           Search cleaned AI dialogue across platforms
+  $ lean-trellis mem context <session-id> [--grep <kw>]   Drill into top hit turns + surrounding turns
+  $ lean-trellis mem extract <session-id> [--phase <p>]   Dump cleaned dialogue (all | brainstorm | implement)
+  $ lean-trellis mem projects [--since YYYY-MM-DD]        List active project cwds across platforms
+  $ lean-trellis mem list                                 List specs, research topics, journals & sessions
+
+FLAGS:
+  --platform claude|codex|devin|grok|pi|antigravity|all   Filter conversation platform (default: all)
+  --since YYYY-MM-DD / --until YYYY-MM-DD                 Date range filter
+  --cwd <path> / --global                                 Project scope or all-project search
+  --grep <kw> / --turns N / --around N / --max-chars N    Context/extract filtering & token budget
+  --phase brainstorm|implement|all                        Slice session by planning vs implementation phase
+  --limit N / --json                                      Result cap & JSON output
 `);
     process.exit(0);
   } else {
-    // Treat as query for recall
-    memory.recall(args.slice(1).join(' '), { cwd: process.cwd() });
+    const allParsed = parseMemFlags(args.slice(1));
+    memory.recall(allParsed.positional.join(' '), allParsed.opts);
     process.exit(0);
   }
 } else if (args[0] === 'recall') {
-  memory.recall(args.slice(1).join(' '), { cwd: process.cwd() });
+  const { opts, positional } = parseMemFlags(args.slice(1));
+  memory.recall(positional.join(' '), opts);
   process.exit(0);
 } else if (args[0] === 'read') {
-  memory.read(args.slice(1), { cwd: process.cwd() });
+  const { opts, positional } = parseMemFlags(args.slice(1));
+  memory.read(positional, opts);
   process.exit(0);
 } else if (args[0] === 'check-update') {
   checkForUpdate(false);

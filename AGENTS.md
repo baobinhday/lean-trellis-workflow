@@ -23,17 +23,20 @@ For a confirmed update, follow this short order: read the existing topic; edit t
    - Automatically initialize `.trellis/research/<slug>/` with `prd.md` (Status: Draft), `design.md` (Status: Draft), `implement.md` (Status: Planning).
    - Inspect codebase before asking questions; ask at most 1 high-value question with recommendation & trade-off.
    - Upon user confirmation of PRD, promote `prd.md` and `design.md` to Status: Approved.
-2. When user chats: "Implement task <name>", "Triển khai task <tên>":
+2. When user chats: "Implement task <name>", "Triển khai task <tên>" (or "... theo TDD"):
    - Update `implement.md` header to Status: In Progress.
-   - Read `implement.md`, execute step-by-step directly in the current session.
+   - Read `implement.md`, execute step-by-step directly in the current session (use Behavior-Slice TDD — Red test on public interface ➔ Green ➔ Refactor — when requested).
    - Test each step and check off `[x]` upon completion (strictly in Section 1 checklist; keep Risk Watchlist as plain bullet points).
    - Once all tasks are checked off (before verification/nghiệm thu):
      - Update `implement.md` header to Status: Verification.
+     - Inspect `git status --porcelain` and `git log --oneline -5`; separate AI-edited files from unrecognized dirty files (never silently stage unrelated WIP).
      - Output 2 ready-to-run Git commands:
-       1. `git add <specific touched files>` (list specific files, avoid `git add .`)
+       1. `git add <specific AI-edited files>` (list specific files, avoid `git add .`)
        2. `git commit -m "<conventional commit message>"`
 3. When user chats: "Check task <name>", "Verify task <name>", "Nghiệm thu task <tên>":
    - Verify Acceptance Criteria in `prd.md`, run test suite.
    - Upon successful verification, update `prd.md`, `design.md`, and `implement.md` to Status: Completed.
    - Update specs and log session with `add_session.py` (referencing the commit hash if committed).
+4. When user chats: "Bootstrap specs", "Khởi tạo spec cho dự án":
+   - Follow `lean-trellis-update-spec` (`references/bootstrap-codebase-specs.md`) to analyze repository architecture and write source-backed specs into `.trellis/spec/` with zero template placeholders.
 <!-- LEAN_TRELLIS_WORKFLOW:END -->

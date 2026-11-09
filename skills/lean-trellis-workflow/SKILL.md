@@ -78,15 +78,18 @@ The user interacts using natural language. The assistant automatically activates
 ### Phase 4: Implementation ("Implement task `<name>`")
 1. **Initial Status Update**: Immediately edit `implement.md` header to `**Status:** In Progress`.
 2. Read `implement.md` to locate the current pending subtask (`[ ]`).
-3. Implement code directly in the active session.
+3. Implement code directly in the active session (consult `.trellis/spec/guides/pre-implementation-checklist.md` before adding constants/shared logic, or use **Behavior-Slice TDD** — Red test on public interface ➔ Green implementation ➔ Refactor — when requested).
 4. Validate immediately with unit tests or build commands.
 5. Update `implement.md` by checking off `[x]`.
 6. Provide a brief progress summary and move to the next item.
-7. **Pre-Verification Git Hand-off & Verification Status**: Once all items in `## 1. Ordered Implementation Checklist` are marked `[x]`:
+7. **Smart Pre-Verification Git Hand-off & Verification Status**: Once all items in `## 1. Ordered Implementation Checklist` are marked `[x]`:
    - Update `implement.md` header to `**Status:** Verification`.
+   - Inspect `git status --porcelain` and `git log --oneline -5` (to match repo commit conventions).
+   - Separate **AI-edited files** (touched by this task) from **Unrecognized dirty files** (unrelated user WIP — never silently stage these).
    - Output 2 ready-to-run Git commands:
      - `git add <file1> <file2> ...` (explicitly list only the files touched by this task; never use blind `git add .`).
      - `git commit -m "<type(scope): concise conventional commit message>"`.
+   - If unrecognized dirty files are present, list them separately as an excluded notice.
 
 ### Phase 5: Verification & Completion ("Check task `<name>`")
 1. Run the project verification suite (`npm test`, build check, type check).
