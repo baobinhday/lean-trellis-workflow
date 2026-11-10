@@ -145,20 +145,29 @@ COMMANDS:
   version                  Show version
 
 OPTIONS:
-  -u, --user <name>   Developer username for .trellis/workspace/<name>
-  -h, --help          Show help
-  -v, --version       Show version
+  -u, --user <name>       Developer username for .trellis/workspace/<name>
+  -a, --agent <agents>    Select target coding agents (claude, cursor, antigravity, codex, opencode, windsurf, all)
+                          (repeatable or comma-separated, default: all)
+  --with-uiux, --uiux     Also install UIUX Orchestrator & specialist skills (Taste, Impeccable, Motion, etc.)
+  -h, --help              Show help
+  -v, --version           Show version
 
 EXAMPLES:
   # Initialize or upgrade in current directory:
   $ lean-trellis init
   $ lean-trellis upgrade
 
+  # Initialize only for specific agents (e.g. Cursor & Claude Code):
+  $ lean-trellis init -a cursor,claude
+
+  # Initialize with full UI/UX specialist skills:
+  $ lean-trellis init -a cursor --with-uiux
+
   # Check for package updates:
   $ lean-trellis check-update
 
   # Initialize in a specific project:
-  $ lean-trellis init /path/to/my-project -u my-name
+  $ lean-trellis init /path/to/my-project -u my-name -a antigravity
 
   # Recall past project decisions & history:
   $ lean-trellis mem recall "authentication"
@@ -172,6 +181,8 @@ EXAMPLES:
 let command = 'init';
 let targetDir = process.cwd();
 let user = null;
+const agents = [];
+let withUiux = false;
 
 let i = 0;
 while (i < args.length) {
@@ -184,6 +195,10 @@ while (i < args.length) {
     process.exit(0);
   } else if (arg === '-u' || arg === '--user') {
     user = args[++i];
+  } else if (arg === '-a' || arg === '--agent') {
+    agents.push(args[++i]);
+  } else if (arg === '--with-uiux' || arg === '--uiux') {
+    withUiux = true;
   } else if (arg === 'init' || arg === 'install') {
     command = 'init';
   } else if (arg === 'upgrade' || arg === 'refresh') {
@@ -201,9 +216,9 @@ try {
     doctor(targetDir);
   } else if (command === 'upgrade') {
     upgradeGlobalCLI();
-    install({ targetDir, user });
+    install({ targetDir, user, agents, withUiux });
   } else {
-    install({ targetDir, user });
+    install({ targetDir, user, agents, withUiux });
   }
 } catch (err) {
   console.error('\n❌ Error:', err.message);

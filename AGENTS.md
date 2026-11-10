@@ -23,8 +23,12 @@ For a confirmed update, follow this short order: read the existing topic; edit t
    - Automatically initialize `.trellis/research/<slug>/` with `prd.md` (Status: Draft), `design.md` (Status: Draft), `implement.md` (Status: Planning).
    - Inspect codebase before asking questions; ask at most 1 high-value question with recommendation & trade-off.
    - Upon user confirmation of PRD, promote `prd.md` and `design.md` to Status: Approved.
-2. When user chats: "Implement task <name>", "Triển khai task <tên>" (or "... theo TDD"):
+2. When user chats: "Implement task <name>", "Triển khai task <tên>" (or "... theo TDD", "... kèm UI", "... dùng UIUX skill"):
    - Update `implement.md` header to Status: In Progress.
+   - If the task involves Frontend / UI:
+     - Read `.trellis/spec/design-system.md` as the authoritative source of truth for tokens and styling primitives.
+     - Strictly enforce **The 6 Mandatory UI States**: Normal, Loading (Skeleton), Empty, Error, Validation, Responsive (Mobile 390px / Desktop 1280px).
+     - If `uiux-orchestrator` / UIUX skills are installed, route capability slots to specialist skills (e.g. UI UX Pro Max for data table/form UX, Emil Kowalski for motion physics, Impeccable for contrast/polish).
    - Read `implement.md`, execute step-by-step directly in the current session (use Behavior-Slice TDD — Red test on public interface ➔ Green ➔ Refactor — when requested).
    - Test each step and check off `[x]` upon completion (strictly in Section 1 checklist; keep Risk Watchlist as plain bullet points).
    - Once all tasks are checked off (before verification/nghiệm thu):
@@ -39,4 +43,6 @@ For a confirmed update, follow this short order: read the existing topic; edit t
    - Update specs and log session with `add_session.py` (referencing the commit hash if committed).
 4. When user chats: "Bootstrap specs", "Khởi tạo spec cho dự án":
    - Follow `lean-trellis-update-spec` (`references/bootstrap-codebase-specs.md`) to analyze repository architecture and write source-backed specs into `.trellis/spec/` with zero template placeholders.
+5. When user chats: "Tạo spec design cho dự án", "Khởi tạo design spec", "Bootstrap design spec":
+   - Follow `lean-trellis-update-spec` (`references/bootstrap-design-system-spec.md`) to scan repository styling, tokens, and write `.trellis/spec/design-system.md` with zero template placeholders.
 <!-- LEAN_TRELLIS_WORKFLOW:END -->

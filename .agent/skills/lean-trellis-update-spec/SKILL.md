@@ -12,6 +12,7 @@ Capture durable contracts and conventions into `.trellis/spec/` as short, source
 - A debugging, implementation, or discussion produced a boundary that should still hold next session
 - Research in `.trellis/research/<topic>.md` is ready to promote
 - User asks to bootstrap or reverse-engineer `.trellis/spec/` from an existing codebase (e.g. *"Khởi tạo spec cho dự án"*, *"Bootstrap specs"*) — read [references/bootstrap-codebase-specs.md](references/bootstrap-codebase-specs.md) for the full single-agent codebase analysis and spec-writing workflow.
+- User asks to bootstrap or create design system specifications (e.g. *"Tạo spec design cho dự án"*, *"Khởi tạo design spec"*, *"Bootstrap design spec"*) — read [references/bootstrap-design-system-spec.md](references/bootstrap-design-system-spec.md) to inspect framework styling, tokens, and write `.trellis/spec/design-system.md`.
 
 ## Write
 

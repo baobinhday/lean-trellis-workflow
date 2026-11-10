@@ -16,15 +16,17 @@ Sau khi cài đặt, **bạn KHÔNG CẦN phải mở terminal gõ lệnh bash h
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   BA LỆNH CHAT CHÍNH                                   │
+│                                   CÁC LỆNH CHAT CHÍNH                                  │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 1. LẬP KẾ HOẠCH:   "Tạo task <tên>", "Lập kế hoạch <tên>", hoặc "/plan <tên>"          │
 │    ➔ AI TỰ ĐỘNG tạo .trellis/research/<slug>/, sinh prd.md, design.md, implement.md    │
 │    ➔ AI TỰ ĐỘNG khảo sát code trước, rồi hỏi phỏng vấn bạn 1 câu quan trọng nhất.      │
 │    ➔ Trạng thái: prd.md (Draft ➔ Approved), implement.md (Planning) [Cột 1: Planning]  │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. TRIỂN KHAI:     "Implement task <tên>", "Triển khai task <tên>"                     │
+│ 2. TRIỂN KHAI:     "Implement task <tên>", "Triển khai task <tên> kèm UI"              │
 │    ➔ AI cập nhật implement.md sang 'In Progress', code trực tiếp & tick [x] từng bước  │
+│    ➔ Nếu là task UI: AI tự nạp .trellis/spec/design-system.md, ép đủ 6 trạng thái UI   │
+│      (Normal, Loading Skeleton, Empty, Error, Validation, Responsive 390px vs 1280px)  │
 │    ➔ Khi xong hết checklist: chuyển 'Verification' & xuất 2 lệnh Git (add, commit)      │
 │    ➔ Trạng thái: implement.md (In Progress ➔ Verification) [Cột 2 / Cột 3]            │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
@@ -32,6 +34,10 @@ Sau khi cài đặt, **bạn KHÔNG CẦN phải mở terminal gõ lệnh bash h
 │    ➔ AI TỰ ĐỘNG đối chiếu Acceptance Criteria trong prd.md, chạy full test suite       │
 │    ➔ Khi đạt: đồng bộ tất cả tài liệu sang 'Completed' & ghi nhật ký add_session.py    │
 │    ➔ Trạng thái: prd.md, design.md, implement.md (Completed) [Cột 4: Done]             │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 4. SPEC DESIGN:    "Tạo spec design cho dự án", "Khởi tạo design spec"                 │
+│    ➔ AI quét styling (Tailwind, Shadcn, MUI...), trích xuất tokens màu, font, spacing  │
+│    ➔ Tạo file .trellis/spec/design-system.md làm "chân lý thiết kế" bền vững           │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -85,11 +91,20 @@ npm install -g baobinhday/lean-trellis-workflow
 # (Hoặc cài đặt từ thư mục mã nguồn cục bộ):
 # npm install -g /path/to/lean-trellis-workflow
 
-# Khởi tạo dự án hiện tại:
+# Khởi tạo dự án hiện tại (mặc định cho tất cả agents):
 lean-trellis init
 
+# Khởi tạo CHỈ cho agent bạn đang dùng (ví dụ Cursor và Claude Code):
+lean-trellis init -a cursor,claude
+
+# Khởi tạo cho Google Antigravity / Gemini CLI:
+lean-trellis init -a antigravity
+
+# Khởi tạo kèm trọn bộ UI/UX Orchestrator & Specialist Skills (Taste, Impeccable, Emil Motion...):
+lean-trellis init -a cursor --with-uiux
+
 # Hoặc chỉ định đường dẫn và tên developer:
-lean-trellis init /home/user/my-project -u alice
+lean-trellis init /home/user/my-project -u alice -a cursor
 
 # Kiểm tra sức khỏe môi trường dự án:
 lean-trellis doctor
@@ -106,11 +121,14 @@ lean-trellis doctor
 Nếu bạn không muốn cài npm global:
 
 ```bash
-# Cài đặt vào dự án hiện tại:
-bash /path/to/lean-trellis-workflow/install.sh .
+# Cài đặt tương tác (script sẽ hỏi bạn chọn Agent):
+bash install.sh .
 
-# Hoặc chỉ định đường dẫn và tên developer:
-bash /path/to/lean-trellis-workflow/install.sh /home/user/my-project alice
+# Hoặc chọn agent cụ thể bằng cờ lệnh:
+bash install.sh . developer -a cursor,antigravity
+
+# Cài đặt kèm bộ chuyên gia UI/UX:
+bash install.sh . developer -a cursor --with-uiux
 ```
 
 ### Những gì script tự động thiết lập:

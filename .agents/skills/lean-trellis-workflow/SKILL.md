@@ -17,8 +17,9 @@ The user interacts using natural language. The assistant automatically activates
 | User Prompt (English or Vietnamese) | Autonomous Assistant Actions | Mandatory Status Transition |
 | :--- | :--- | :--- |
 | **1. "Tạo task / Lập kế hoạch `<name>`"**<br>*or "Create task `<name>`", "Plan feature `<name>`", `/plan `<name>`* | **Autonomous Scaffolding & Planning**:<br>• Create topic directory `.trellis/research/<slug>/`<br>• Initialize `prd.md`, `design.md`, `implement.md`<br>• Inspect existing codebase evidence first, then clarify requirements.<br>• Confirm scope and approve plan. | • `prd.md`: `Draft` ➔ `Approved`<br>• `design.md`: `Draft` ➔ `Approved`<br>• `implement.md`: `Planning` |
-| **2. "Implement task `<name>`"**<br>*or "Triển khai task `<name>`", "Start coding..."* | **Direct In-Session Execution**:<br>• Set status to `In Progress`.<br>• Read `implement.md` to identify pending tasks (`[ ]`).<br>• Write code, run tests incrementally, and mark `[x]` (only in Section 1).<br>• Upon finishing all checklist items, set status to `Verification` and output 2 Git commands (`git add`, `git commit`). | • Start: `implement.md` ➔ `In Progress`<br>• All items done: `implement.md` ➔ `Verification` |
+| **2. "Implement task `<name>`"**<br>*or "Triển khai task `<name>` (kèm UI)", "dùng UIUX skill"* | **Direct In-Session Execution**:<br>• Set status to `In Progress`.<br>• If task has UI: read `.trellis/spec/design-system.md`, enforce 6 UI States, route to UIUX specialists if installed.<br>• Read `implement.md` to identify pending tasks (`[ ]`).<br>• Write code, run tests incrementally, and mark `[x]` (only in Section 1).<br>• Upon finishing all checklist items, set status to `Verification` and output 2 Git commands (`git add`, `git commit`). | • Start: `implement.md` ➔ `In Progress`<br>• All items done: `implement.md` ➔ `Verification` |
 | **3. "Check task `<name>`"**<br>*or "Nghiệm thu task `<name>`", "Finish task..."* | **Verification & Knowledge Persistence**:<br>• Reconcile Acceptance Criteria in `prd.md`.<br>• Execute the project test suite (`npm test`, build check).<br>• Update status to `Completed` across task docs.<br>• Update `.trellis/spec/` conventions and record session journal via `add_session.py`. | • `prd.md` ➔ `Completed`<br>• `design.md` ➔ `Completed`<br>• `implement.md` ➔ `Completed` |
+| **4. "Tạo spec design cho dự án"**<br>*or "Khởi tạo design spec", "Bootstrap design spec"* | **Design System Intelligence & Scaffolding**:<br>• Scan codebase styling & token configs.<br>• Leverage UIUX specialist skills if available.<br>• Generate `.trellis/spec/design-system.md` with zero placeholders. | • `.trellis/spec/design-system.md` created & linked in `index.md` |
 
 ---
 
@@ -83,10 +84,15 @@ The user interacts using natural language. The assistant automatically activates
 1. **Initial Status Update**: Immediately edit `implement.md` header to `**Status:** In Progress`.
 2. Read `implement.md` to locate the current pending subtask (`[ ]`).
 3. Implement code directly in the active session (consult `.trellis/spec/guides/pre-implementation-checklist.md` before adding constants/shared logic, or use **Behavior-Slice TDD** — Red test on public interface ➔ Green implementation ➔ Refactor — when requested).
-4. Validate immediately with unit tests or build commands.
-5. Update `implement.md` by checking off `[x]`.
-6. Provide a brief progress summary and move to the next item.
-7. **Smart Pre-Verification Git Hand-off & Verification Status**: Once all items in `## 1. Ordered Implementation Checklist` are marked `[x]`:
+4. **Frontend & UI/UX Execution Discipline**:
+   - If the task touches UI or user requests UIUX skills (*"kèm UI"*, *"dùng UIUX skill"*):
+     - Read `.trellis/spec/design-system.md` as the project authority for tokens, colors, fonts, and spacing.
+     - Strictly implement **The 6 Mandatory UI States**: Normal, Loading (Skeleton), Empty, Error, Validation, Responsive (Mobile 390px vs Desktop 1280px).
+     - If `uiux-orchestrator` is installed, route capability slots to specialist skills (e.g., UI UX Pro Max for complex components, Emil Kowalski for motion physics, Impeccable for contrast/polish).
+5. Validate immediately with unit tests or build commands.
+6. Update `implement.md` by checking off `[x]`.
+7. Provide a brief progress summary and move to the next item.
+8. **Smart Pre-Verification Git Hand-off & Verification Status**: Once all items in `## 1. Ordered Implementation Checklist` are marked `[x]`:
    - Update `implement.md` header to `**Status:** Verification`.
    - Inspect `git status --porcelain` and `git log --oneline -5` (to match repo commit conventions).
    - Separate **AI-edited files** (touched by this task) from **Unrecognized dirty files** (unrelated user WIP — never silently stage these).
