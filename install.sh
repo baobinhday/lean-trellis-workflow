@@ -16,7 +16,8 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Tùy chọn:"
       echo "  -a, --agent <agents>   Chọn agents cài đặt: claude, cursor, antigravity, codex, opencode, windsurf, all"
-      echo "                         (phân tách bằng dấu phẩy hoặc lặp lại cờ, mặc định: hỏi tương tác hoặc all)"
+      echo "                         (phân tách bằng dấu phẩy hoặc lặp lại cờ; nếu không truyền sẽ hiện danh sách chọn,"
+      echo "                         mặc định: claude,codex,opencode)"
       echo "  --with-uiux, --uiux    Cài đặt thêm UIUX Orchestrator & Specialist Skills (Taste, Impeccable, Motion...)"
       echo "  -u, --user <name>      Tên định danh developer"
       echo "  -d, --dir <path>       Thư mục dự án đích"
@@ -59,30 +60,123 @@ done
 # Chuẩn hóa tên developer không dấu/khoảng trắng
 DEV_NAME="$(echo "$DEV_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
 
-# Nếu chưa chọn agents qua cờ: hỏi tương tác nếu có terminal, hoặc chọn all nếu chạy nền
+# Nếu chưa chọn agents qua cờ: hiện danh sách tương tác nếu có terminal, mặc định chọn claude, codex, opencode
 if [[ -z "$SELECTED_AGENTS" ]]; then
-  if [ -t 0 ]; then
-    echo "🤖 Chọn coding agents bạn đang sử dụng:"
-    echo "  1) Tất cả (All: Claude, Cursor, Antigravity, Codex, OpenCode, Windsurf) [Mặc định]"
-    echo "  2) Cursor (.cursor/)"
-    echo "  3) Claude Code (.claude/)"
-    echo "  4) Google Antigravity / Gemini CLI (.agent/)"
-    echo "  5) Codex (.codex/ & .agents/)"
-    echo "  6) Tùy chỉnh (ví dụ: cursor,claude hoặc cursor,antigravity)"
-    read -rp "Nhập lựa chọn [1-6, Enter để chọn 1]: " agent_choice
-    case "$agent_choice" in
-      2) SELECTED_AGENTS="cursor" ;;
-      3) SELECTED_AGENTS="claude" ;;
-      4) SELECTED_AGENTS="antigravity" ;;
-      5) SELECTED_AGENTS="codex" ;;
-      6)
-        read -rp "Nhập danh sách agents (cách nhau bởi dấu phẩy): " custom_agents
-        SELECTED_AGENTS="${custom_agents:-all}"
-        ;;
-      *) SELECTED_AGENTS="all" ;;
-    esac
+  if [ -t 0 ] && [ -t 1 ]; then
+    AGENT_IDS=("claude" "codex" "opencode" "cursor" "antigravity" "windsurf")
+    AGENT_DESCS=(
+      "Claude Code (.claude/)"
+      "Codex (.codex/ & .agents/)"
+      "OpenCode (.opencode/)"
+      "Cursor (.cursor/)"
+      "Google Antigravity / Gemini CLI (.agent/)"
+      "Windsurf (.windsurf/)"
+    )
+    AGENT_CHECKED=(1 1 1 0 0 0)
+    CURSOR_IDX=0
+    RENDERED_ONCE=0
+    TOTAL_MENU_LINES=$(( ${#AGENT_IDS[@]} + 2 ))
+
+    render_agent_menu() {
+      if [[ $RENDERED_ONCE -eq 1 ]]; then
+        printf "\033[%dA\033[J" "$TOTAL_MENU_LINES"
+      fi
+      echo "🤖 Chọn coding agents cần cài đặt (↑/↓ di chuyển, Space/1-6 chọn, a chọn hết, Enter xác nhận):"
+      local current_selected=()
+      for idx in "${!AGENT_IDS[@]}"; do
+        local pointer=" "
+        [[ $idx -eq $CURSOR_IDX ]] && pointer="❯"
+        local box="[ ]"
+        if [[ ${AGENT_CHECKED[$idx]} -eq 1 ]]; then
+          box="[x]"
+          current_selected+=("${AGENT_IDS[$idx]}")
+        fi
+        printf "  %s %s %d) %-12s — %s\n" "$pointer" "$box" "$((idx + 1))" "${AGENT_IDS[$idx]}" "${AGENT_DESCS[$idx]}"
+      done
+      if [[ ${#current_selected[@]} -gt 0 ]]; then
+        local joined
+        joined="$(IFS=, ; echo "${current_selected[*]}")"
+        echo "   Đang chọn: ${joined//,/, }"
+      else
+        echo "   Đang chọn: (trống — nhấn Enter sẽ dùng mặc định: claude, codex, opencode)"
+      fi
+      RENDERED_ONCE=1
+    }
+
+    printf "\033[?25l"
+    trap 'printf "\033[?25h\n"; exit 130' INT TERM
+    render_agent_menu
+
+    while true; do
+      IFS= read -rsn1 key || break
+      if [[ -z "$key" ]]; then
+        # Enter pressed
+        break
+      elif [[ "$key" == $'\x1b' ]]; then
+        IFS= read -rsn2 -t 0.05 rest || true
+        if [[ "$rest" == "[A" ]]; then
+          CURSOR_IDX=$(( (CURSOR_IDX - 1 + ${#AGENT_IDS[@]}) % ${#AGENT_IDS[@]} ))
+          render_agent_menu
+        elif [[ "$rest" == "[B" ]]; then
+          CURSOR_IDX=$(( (CURSOR_IDX + 1) % ${#AGENT_IDS[@]} ))
+          render_agent_menu
+        fi
+      elif [[ "$key" == "k" || "$key" == "K" ]]; then
+        CURSOR_IDX=$(( (CURSOR_IDX - 1 + ${#AGENT_IDS[@]}) % ${#AGENT_IDS[@]} ))
+        render_agent_menu
+      elif [[ "$key" == "j" || "$key" == "J" ]]; then
+        CURSOR_IDX=$(( (CURSOR_IDX + 1) % ${#AGENT_IDS[@]} ))
+        render_agent_menu
+      elif [[ "$key" == " " ]]; then
+        if [[ ${AGENT_CHECKED[$CURSOR_IDX]} -eq 1 ]]; then
+          AGENT_CHECKED[$CURSOR_IDX]=0
+        else
+          AGENT_CHECKED[$CURSOR_IDX]=1
+        fi
+        render_agent_menu
+      elif [[ "$key" =~ ^[1-6]$ ]]; then
+        num_idx=$(( key - 1 ))
+        CURSOR_IDX=$num_idx
+        if [[ ${AGENT_CHECKED[$num_idx]} -eq 1 ]]; then
+          AGENT_CHECKED[$num_idx]=0
+        else
+          AGENT_CHECKED[$num_idx]=1
+        fi
+        render_agent_menu
+      elif [[ "$key" == "a" || "$key" == "A" ]]; then
+        all_on=1
+        for val in "${AGENT_CHECKED[@]}"; do
+          [[ $val -eq 0 ]] && all_on=0
+        done
+        for idx in "${!AGENT_IDS[@]}"; do
+          if [[ $all_on -eq 1 ]]; then
+            AGENT_CHECKED[$idx]=0
+          else
+            AGENT_CHECKED[$idx]=1
+          fi
+        done
+        render_agent_menu
+      fi
+    done
+
+    printf "\033[?25h"
+    trap - INT TERM
+
+    CHOSEN_LIST=()
+    for idx in "${!AGENT_IDS[@]}"; do
+      if [[ ${AGENT_CHECKED[$idx]} -eq 1 ]]; then
+        CHOSEN_LIST+=("${AGENT_IDS[$idx]}")
+      fi
+    done
+    if [[ ${#CHOSEN_LIST[@]} -eq 0 ]]; then
+      SELECTED_AGENTS="claude,codex,opencode"
+    else
+      SELECTED_AGENTS="$(IFS=, ; echo "${CHOSEN_LIST[*]}")"
+    fi
+    echo "  ✓ Đã chọn agents: $SELECTED_AGENTS"
+    echo ""
   else
-    SELECTED_AGENTS="all"
+    SELECTED_AGENTS="claude,codex,opencode"
   fi
 fi
 

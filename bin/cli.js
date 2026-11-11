@@ -175,7 +175,7 @@ COMMANDS:
 OPTIONS:
   -u, --user <name>       Developer username for .trellis/workspace/<name>
   -a, --agent <agents>    Select target coding agents (claude, cursor, antigravity, codex, opencode, windsurf, all)
-                          (repeatable or comma-separated, default: all)
+                          (repeatable or comma-separated; if omitted, prompts interactively with default: claude,codex,opencode)
   --with-uiux, --uiux     Also install UIUX Orchestrator & specialist skills (Taste, Impeccable, Motion, etc.)
   -h, --help              Show help
   -v, --version           Show version
@@ -239,16 +239,18 @@ while (i < args.length) {
   i++;
 }
 
-try {
-  if (command === 'doctor') {
-    doctor(targetDir);
-  } else if (command === 'upgrade') {
-    upgradeGlobalCLI();
-    install({ targetDir, user, agents, withUiux });
-  } else {
-    install({ targetDir, user, agents, withUiux });
+(async () => {
+  try {
+    if (command === 'doctor') {
+      doctor(targetDir);
+    } else if (command === 'upgrade') {
+      upgradeGlobalCLI();
+      await install({ targetDir, user, agents, withUiux });
+    } else {
+      await install({ targetDir, user, agents, withUiux });
+    }
+  } catch (err) {
+    console.error('\n❌ Error:', err.message);
+    process.exit(1);
   }
-} catch (err) {
-  console.error('\n❌ Error:', err.message);
-  process.exit(1);
-}
+})();
