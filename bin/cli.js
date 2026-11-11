@@ -38,6 +38,34 @@ function upgradeGlobalCLI() {
   }
 }
 
+function checkForUpdate(silent = false) {
+  const repo = 'baobinhday/lean-trellis-workflow';
+  try {
+    const remoteRef = execSync(`git ls-remote https://github.com/${repo}.git refs/heads/main`, {
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+      timeout: 4000
+    }).trim().split('\t')[0];
+
+    if (!silent) {
+      console.log(`\n✅ ${pkg.name} is installed (v${pkg.version}).`);
+      if (remoteRef) {
+        console.log(`   Latest remote commit on main: ${remoteRef.substring(0, 7)}`);
+      }
+      console.log(`   To upgrade your global CLI to the latest version:`);
+      console.log(`   $ npm install -g ${repo}\n`);
+    }
+    return true;
+  } catch (_) {
+    if (!silent) {
+      console.log(`\nℹ️  Current installed version: v${pkg.version}`);
+      console.log(`   To update global CLI from GitHub:`);
+      console.log(`   $ npm install -g ${repo}\n`);
+    }
+    return false;
+  }
+}
+
 function parseMemFlags(rawArgs) {
   const opts = { cwd: process.cwd() };
   const positional = [];
