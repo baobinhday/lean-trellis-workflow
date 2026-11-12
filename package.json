@@ -1,6 +1,6 @@
 {
   "name": "lean-trellis-workflow",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Structured, single-agent workflow for large features and complex tasks in AI coding assistants",
   "main": "index.js",
   "bin": {
