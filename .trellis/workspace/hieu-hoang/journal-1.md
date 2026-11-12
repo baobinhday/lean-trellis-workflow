@@ -88,3 +88,26 @@ Topics: [.trellis/research/lean-trellis-evolution.md](../../research/lean-trelli
 ### Status
 
 [OK] **Completed**
+
+
+## Session 5: Complete task: scoped-code-graph
+<!-- trellis-session: v=2 fp=6d8e03d20be31baf -->
+
+**Date**: 2026-11-12
+**Task**: Complete task: scoped-code-graph
+**Branch**: `main`
+
+### Summary
+
+Implemented zero-dependency scoped codegraph CLI reader (lib/graph.js, bin/cli.js, doctor check, skill hooks, and .trellis/.runtime/codegraph.json v1 spec contract) compatible with trellis-card AST cache. All 5 node --test cases pass.
+Topics: [.trellis/research/scoped-code-graph/prd.md](../../research/scoped-code-graph/prd.md)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c06d0f9` | feat(graph): add zero-dependency scoped codegraph CLI reader and skill hooks |
+
+### Status
+
+[OK] **Completed**

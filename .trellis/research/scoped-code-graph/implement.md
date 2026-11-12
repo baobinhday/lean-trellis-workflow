@@ -1,6 +1,6 @@
 # Implementation Plan: Scoped Code Graph Engine & CLI Reader (`lean-trellis graph`)
 
-**Status:** Verification
+**Status:** Completed
 <!-- Lifecycle: Planning -> In Progress -> Verification -> Completed (or Blocked) -->
 **PRD Reference:** [prd.md](./prd.md)  
 **Design Reference:** [design.md](./design.md)  

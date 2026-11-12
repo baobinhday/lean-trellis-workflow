@@ -1,6 +1,6 @@
 # Technical Design: Scoped Code Graph Engine & CLI Reader (`lean-trellis graph`)
 
-**Status:** Approved
+**Status:** Completed
 <!-- Lifecycle: Draft -> Approved -> Completed -->
 **Topic Path:** `.trellis/research/scoped-code-graph/`  
 **PRD Reference:** [prd.md](./prd.md)  

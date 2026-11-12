@@ -1,6 +1,6 @@
 # PRD: Scoped Code Graph Engine & CLI Reader (`lean-trellis graph`)
 
-**Status:** Approved
+**Status:** Completed
 <!-- Lifecycle: Draft -> In Review -> Approved -> Completed -->
 **Topic Path:** `.trellis/research/scoped-code-graph/`  
 **Date:** 2026-11-12  
@@ -71,11 +71,11 @@
 ---
 
 ## 5. Acceptance Criteria
-- [ ] **AC-1:** `package.json` giữ nguyên `"dependencies": {}` và `bash install.sh` không phát sinh bước cài npm ngoài.
-- [ ] **AC-2:** Với fixture `.trellis/.runtime/codegraph.json` hợp lệ, `lean-trellis graph explore "<symbol>"` trả về định nghĩa + snippet + callers/callees + weighted co-change neighbors trong 1 lần gọi, tôn trọng `--hops` và `--max-chars`.
-- [ ] **AC-3:** Khi một file nguồn có `mtimeMs` mới hơn `generatedAt` trong cache, `lean-trellis graph explore` cảnh báo chính xác file bị stale.
-- [ ] **AC-4:** `lean-trellis doctor` báo trạng thái `CodeGraph Cache` chính xác ở cả 3 trường hợp (`Fresh`, `Stale`, `Not indexed (optional)`) mà không đánh dấu WARN/FAIL cho dự án chưa bật graph.
-- [ ] **AC-5:** Bộ test `node --test` cho `lib/graph.js` và `bin/cli.js` pass 100%.
+- [x] **AC-1:** `package.json` giữ nguyên `"dependencies": {}` và `bash install.sh` không phát sinh bước cài npm ngoài.
+- [x] **AC-2:** Với fixture `.trellis/.runtime/codegraph.json` hợp lệ, `lean-trellis graph explore "<symbol>"` trả về định nghĩa + snippet + callers/callees + weighted co-change neighbors trong 1 lần gọi, tôn trọng `--hops` và `--max-chars`.
+- [x] **AC-3:** Khi một file nguồn có `mtimeMs` mới hơn `generatedAt` trong cache, `lean-trellis graph explore` cảnh báo chính xác file bị stale.
+- [x] **AC-4:** `lean-trellis doctor` báo trạng thái `CodeGraph Cache` chính xác ở cả 3 trường hợp (`Fresh`, `Stale`, `Not indexed (optional)`) mà không đánh dấu WARN/FAIL cho dự án chưa bật graph.
+- [x] **AC-5:** Bộ test `node --test` cho `lib/graph.js` và `bin/cli.js` pass 100%.
 
 ---
 
