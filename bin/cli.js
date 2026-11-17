@@ -210,7 +210,7 @@ COMMANDS:
 OPTIONS:
   -u, --user <name>       Developer username for .trellis/workspace/<name>
   -a, --agent <agents>    Select target coding agents (claude, cursor, antigravity, codex, opencode, windsurf, all)
-                          (repeatable or comma-separated; if omitted, prompts interactively with default: claude,codex,opencode)
+                          (repeatable or comma-separated; if omitted, prompts interactively with default: claude,codex,opencode,antigravity)
   --with-uiux, --uiux     Also install UIUX Orchestrator & specialist skills (Taste, Impeccable, Motion, etc.)
   -h, --help              Show help
   -v, --version           Show version

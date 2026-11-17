@@ -79,6 +79,9 @@ _ENV_SESSION_KEYS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # child; absent from code.claude.com/docs/en/env-vars). CLAUDE_SESSION_ID
     # was removed here — verified absent from that same live environment.
     ("claude", ("CLAUDE_CODE_SESSION_ID",)),
+    # REAL (verified 2026-11): OpenCode CLI injects OPENCODE_SESSION_ID into
+    # shell execution environments and subshells.
+    ("opencode", ("OPENCODE_SESSION_ID",)),
     # REAL, undocumented (verified 2026-08-05: injected by codex-cli 0.146.0
     # into shell children, absent from the parent env; openai/codex#19937).
     # CODEX_SESSION_ID was removed — absent from a live `codex exec` env.

@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
       echo "Tùy chọn:"
       echo "  -a, --agent <agents>   Chọn agents cài đặt: claude, cursor, antigravity, codex, opencode, windsurf, all"
       echo "                         (phân tách bằng dấu phẩy hoặc lặp lại cờ; nếu không truyền sẽ hiện danh sách chọn,"
-      echo "                         mặc định: claude,codex,opencode)"
+      echo "                         mặc định: claude,codex,opencode,antigravity)"
       echo "  --with-uiux, --uiux    Cài đặt thêm UIUX Orchestrator & Specialist Skills (Taste, Impeccable, Motion...)"
       echo "  -u, --user <name>      Tên định danh developer"
       echo "  -d, --dir <path>       Thư mục dự án đích"
@@ -60,7 +60,7 @@ done
 # Chuẩn hóa tên developer không dấu/khoảng trắng
 DEV_NAME="$(echo "$DEV_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
 
-# Nếu chưa chọn agents qua cờ: hiện danh sách tương tác nếu có terminal, mặc định chọn claude, codex, opencode
+# Nếu chưa chọn agents qua cờ: hiện danh sách tương tác nếu có terminal, mặc định chọn claude, codex, opencode, antigravity
 if [[ -z "$SELECTED_AGENTS" ]]; then
   if [ -t 0 ] && [ -t 1 ]; then
     AGENT_IDS=("claude" "codex" "opencode" "cursor" "antigravity" "windsurf")
@@ -72,7 +72,7 @@ if [[ -z "$SELECTED_AGENTS" ]]; then
       "Google Antigravity / Gemini CLI (.agent/)"
       "Windsurf (.windsurf/)"
     )
-    AGENT_CHECKED=(1 1 1 0 0 0)
+    AGENT_CHECKED=(1 1 1 0 1 0)
     CURSOR_IDX=0
     RENDERED_ONCE=0
     TOTAL_MENU_LINES=$(( ${#AGENT_IDS[@]} + 2 ))
@@ -98,7 +98,7 @@ if [[ -z "$SELECTED_AGENTS" ]]; then
         joined="$(IFS=, ; echo "${current_selected[*]}")"
         echo "   Đang chọn: ${joined//,/, }"
       else
-        echo "   Đang chọn: (trống — nhấn Enter sẽ dùng mặc định: claude, codex, opencode)"
+        echo "   Đang chọn: (trống — nhấn Enter sẽ dùng mặc định: claude, codex, opencode, antigravity)"
       fi
       RENDERED_ONCE=1
     }
@@ -169,14 +169,14 @@ if [[ -z "$SELECTED_AGENTS" ]]; then
       fi
     done
     if [[ ${#CHOSEN_LIST[@]} -eq 0 ]]; then
-      SELECTED_AGENTS="claude,codex,opencode"
+      SELECTED_AGENTS="claude,codex,opencode,antigravity"
     else
       SELECTED_AGENTS="$(IFS=, ; echo "${CHOSEN_LIST[*]}")"
     fi
     echo "  ✓ Đã chọn agents: $SELECTED_AGENTS"
     echo ""
   else
-    SELECTED_AGENTS="claude,codex,opencode"
+    SELECTED_AGENTS="claude,codex,opencode,antigravity"
   fi
 fi
 
@@ -348,6 +348,31 @@ enabled = true
 EOF
   fi
   HOOKS_CONFIGURED+=("Codex")
+fi
+
+# OpenCode
+if has_agent "opencode"; then
+  mkdir -p "$TARGET_DIR/.opencode/hooks"
+  cp "$HOOK_FILE" "$TARGET_DIR/.opencode/hooks/session-start.py"
+  mkdir -p "$TARGET_DIR/.opencode/plugins"
+  if [ ! -f "$TARGET_DIR/.opencode/plugins/lean-trellis.ts" ]; then
+    cat > "$TARGET_DIR/.opencode/plugins/lean-trellis.ts" << 'EOF'
+import type { Plugin } from "@opencode-ai/plugin";
+
+export const LeanTrellisPlugin: Plugin = async ({ $ }) => {
+  return {
+    event: async ({ event }) => {
+      if (event.type === "session.created") {
+        try {
+          await $`python3 .opencode/hooks/session-start.py`;
+        } catch (_) {}
+      }
+    }
+  };
+};
+EOF
+  fi
+  HOOKS_CONFIGURED+=("OpenCode (.opencode/plugins/lean-trellis.ts)")
 fi
 
 if [ ${#HOOKS_CONFIGURED[@]} -gt 0 ]; then

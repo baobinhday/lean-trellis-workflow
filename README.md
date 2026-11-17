@@ -91,7 +91,7 @@ npm install -g baobinhday/lean-trellis-workflow
 # (Hoặc cài đặt từ thư mục mã nguồn cục bộ):
 # npm install -g /path/to/lean-trellis-workflow
 
-# Khởi tạo dự án hiện tại (hiện danh sách chọn agent tương tác, mặc định: claude, codex, opencode):
+# Khởi tạo dự án hiện tại (hiện danh sách chọn agent tương tác, mặc định: claude, codex, opencode, antigravity):
 lean-trellis init
 
 # Khởi tạo CHỈ cho agent bạn đang dùng (ví dụ Cursor và Claude Code):
